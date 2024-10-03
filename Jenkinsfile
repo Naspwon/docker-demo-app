@@ -23,7 +23,7 @@ pipeline{
                 git config user.name "Naspwon"
                 git config user.email "naominyongesa12@gmail.com"
                 git add .
-                git commit -m "Deploying app"
+                git commit -m "Deploying app to main"
                 git push origin main
                 '''
         }
