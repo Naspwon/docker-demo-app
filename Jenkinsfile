@@ -32,7 +32,7 @@ pipeline{
                 sh 'curl -I http://localhost:3000 || exit 1'
             }
         }
-        stage('deploy to git'){
+        stage('deploy to heroku'){
             steps{
                 withCredentials([usernameColonPassword(credentialsId: 'b20864a3-1d63-4d6f-8541-6d56d4f4aa0e', variable: 'HEROKU_CREDENTIALS')]) {
                    sh 'git push https://${HEROKU_CREDENTIALS}@git.heroku.com/dockerd-app.git main' }
@@ -41,10 +41,30 @@ pipeline{
     }
     post {
         success {
-            slackSend(channel: 'C07PURQG2A3', message: "Build succeeded: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            script {
+                def webhookUrl = credentials('slack-webhook-url')
+                httpRequest(
+                    httpMode: 'POST',
+                    url: webhookUrl,
+                    contentType: 'APPLICATION_JSON',
+                    requestBody: """{
+                        "text": "Deployment succeeded: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+                    }"""
+                )
+            }
         }
         failure {
-            slackSend(channel: 'C07PURQG2A3', message: "Build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            script {
+                def webhookUrl = credentials('slack-webhook-url')
+                httpRequest(
+                    httpMode: 'POST',
+                    url: webhookUrl,
+                    contentType: 'APPLICATION_JSON',
+                    requestBody: """{
+                        "text": "Deployment failed: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+                    }"""
+                )
+            }
         }
     }
 }
