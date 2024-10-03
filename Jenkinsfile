@@ -36,7 +36,7 @@ pipeline{
             steps{
                 withCredentials([string(credentialsId: 'HRKU-a80bfd61-8ad6-40c3-bea5-c654532d76b7', variable: 'HEROKU_API_KEY')]) {
                     sh 'echo $HEROKU_API_KEY | heroku auth:token'
-                    sh 'git push https://heroku:$HEROKU_API_KEY@git.heroku.com/dockerd-app.git main'
+                    sh 'git push https://heroku:$HEROKU_API_KEY@git.heroku.com/dockerd-app.git main'}
             }
         }
     }
