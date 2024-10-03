@@ -38,14 +38,14 @@ pipeline{
                    sh 'git push https://${HEROKU_CREDENTIALS}@git.heroku.com/dockerd-app.git main' }
             }
         }
-        stage('Deploy to Render') {
-            steps {
-                withCredentials([string(credentialsId: 'render-api-token', variable: 'RENDER_TOKEN')]) {
-                    sh 'render login --token $RENDER_TOKEN'
-                    sh 'render deploy --dockerfile ./Dockerfile --branch main'
-                }
-            }
-        }
+        // stage('Deploy to Render') {
+        //     steps {
+        //         withCredentials([string(credentialsId: 'render-api-token', variable: 'RENDER_TOKEN')]) {
+        //             sh 'render login --token $RENDER_TOKEN'
+        //             sh 'render deploy --dockerfile ./Dockerfile --branch main'
+        //         }
+        //     }
+        // }
     }
     post {
         success {
