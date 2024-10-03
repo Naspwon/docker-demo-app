@@ -41,10 +41,10 @@ pipeline{
     }
     post {
         success {
-            slackSend (color: 'good', message: "Deployment to Heroku successful: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            slackSend (color: 'good', message: "Deployment to Heroku successful: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", tokenCredentialId: 'slack-token')
         }
         failure {
-            slackSend (color: 'danger', message: "Deployment failed: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            slackSend (color: 'danger', message: "Deployment failed: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", tokenCredentialId: 'slack-token')
         }
     }
 }
