@@ -3,8 +3,9 @@ pipeline{
     stages{
         stage('Clone Repo'){
             steps {
-                git url: 'https://github.com/Naspwon/docker-demo-app.git',
-                git branch: 'main'
+                git (
+                    url: 'https://github.com/Naspwon/docker-demo-app.git',
+                    branch: 'main')
             }
         }
         stage('Install dependencies'){
