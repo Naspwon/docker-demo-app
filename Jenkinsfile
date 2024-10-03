@@ -3,10 +3,10 @@ pipeline{
     tools{
         nodejs "node"
     }
-    environment {
-        HEROKU_API_KEY = credentials('HRKU-983ee96b-7abf-4805-8bf7-fd32f92ef428')  // Heroku API key stored in Jenkins
-        HEROKU_APP_NAME = 'dockerd-app'  // Replace with your Heroku app name
-    }
+    // environment {
+    //     HEROKU_API_KEY = credentials('HRKU-983ee96b-7abf-4805-8bf7-fd32f92ef428')  // Heroku API key stored in Jenkins
+    //     HEROKU_APP_NAME = 'dockerd-app'  // Replace with your Heroku app name
+    // }
     stages{
         stage('Clone Repo'){
             steps {
@@ -34,15 +34,9 @@ pipeline{
         }
         stage('deploy to git'){
             steps{
-                // Login to Heroku via CLI
-                    sh '''
-                    echo $HEROKU_API_KEY | docker login --username=_ --password-stdin registry.heroku.com
-                    git remote add heroku https://git.heroku.com/${HEROKU_APP_NAME}.git || true
-                    git push heroku main
-                    '''
-                    
-                    // Optionally, scale dynos if needed
-                    sh 'heroku ps:scale web=1 --app $HEROKU_APP_NAME'
+                withCredentials([string(credentialsId: 'HRKU-a80bfd61-8ad6-40c3-bea5-c654532d76b7', variable: 'HEROKU_API_KEY')]) {
+                    sh 'echo $HEROKU_API_KEY | heroku auth:token'
+                    sh 'git push https://heroku:$HEROKU_API_KEY@git.heroku.com/dockerd-app.git main'
             }
         }
     }
