@@ -41,10 +41,30 @@ pipeline{
     }
     post {
         success {
-            slackSend (color: 'good', message: "Deployment to Heroku successful: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", tokenCredentialId: 'slack-token')
+            script {
+                def webhookUrl = credentials('slack-webhook-url')
+                httpRequest(
+                    httpMode: 'POST',
+                    url: webhookUrl,
+                    contentType: 'APPLICATION_JSON',
+                    requestBody: """{
+                        "text": "Deployment succeeded: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+                    }"""
+                )
+            }
         }
         failure {
-            slackSend (color: 'danger', message: "Deployment failed: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)", tokenCredentialId: 'slack-token')
+            script {
+                def webhookUrl = credentials('slack-webhook-url')
+                httpRequest(
+                    httpMode: 'POST',
+                    url: webhookUrl,
+                    contentType: 'APPLICATION_JSON',
+                    requestBody: """{
+                        "text": "Deployment failed: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+                    }"""
+                )
+            }
         }
     }
 }
