@@ -32,7 +32,7 @@ pipeline{
                 sh 'curl -I http://localhost:3000 || exit 1'
             }
         }
-        stage('deploy to heroku..'){
+        stage('deploy to heroku.....'){
             steps{
                 withCredentials([usernameColonPassword(credentialsId: 'b20864a3-1d63-4d6f-8541-6d56d4f4aa0e', variable: 'HEROKU_CREDENTIALS')]) {
                    sh 'git push https://${HEROKU_CREDENTIALS}@git.heroku.com/dockerd-app.git main' }
