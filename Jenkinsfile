@@ -3,10 +3,11 @@ pipeline{
     tools{
         nodejs "node"
     }
-    // environment {
-    //     HEROKU_API_KEY = credentials('HRKU-983ee96b-7abf-4805-8bf7-fd32f92ef428')  // Heroku API key stored in Jenkins
-    //     HEROKU_APP_NAME = 'dockerd-app'  // Replace with your Heroku app name
-    // }
+    environment {
+        MONGO_DB_USERNAME = credentials('mongo') // Replace with the actual username credential ID
+        MONGO_DB_PWD = credentials('password') // Replace with the actual password credential ID
+        RENDER_TOKEN = credentials('rnd_vapAnWm1WZVvS6ZmVm7aJYZs9Wck') // Replace with your Render API token credential ID
+    }
     stages{
         stage('Clone Repo'){
             steps {
@@ -38,14 +39,14 @@ pipeline{
                    sh 'git push https://${HEROKU_CREDENTIALS}@git.heroku.com/dockerd-app.git main' }
             }
         }
-        // stage('Deploy to Render') {
-        //     steps {
-        //         withCredentials([string(credentialsId: 'render-api-token', variable: 'RENDER_TOKEN')]) {
-        //             sh 'render login --token $RENDER_TOKEN'
-        //             sh 'render deploy --dockerfile ./Dockerfile --branch main'
-        //         }
-        //     }
-        // }
+        stage('Deploy to Render') {
+            steps {
+                withCredentials([string(credentialsId: 'render-api-token', variable: 'RENDER_TOKEN')]) {
+                    sh 'render login --token $RENDER_TOKEN' // Log in to Render using the API token
+                    sh 'render deploy --dockerfile ./Dockerfile --branch main' // Deploy to Render using the Dockerfile
+                }
+            }
+        }
     }
     post {
         success {
