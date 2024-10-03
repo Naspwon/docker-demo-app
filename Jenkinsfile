@@ -42,7 +42,7 @@ pipeline{
             steps {
                 withCredentials([string(credentialsId: 'render-api-token', variable: 'RENDER_TOKEN')]) {
                     sh 'render login --token $RENDER_TOKEN'
-                    sh 'render deploy --service your-service-name --branch main'
+                    sh 'render deploy --service docker-demo-app --branch main'
                 }
             }
         }
