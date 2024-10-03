@@ -41,30 +41,10 @@ pipeline{
     }
     post {
         success {
-            script {
-                def webhookUrl = credentials('slack-webhook-url')
-                httpRequest(
-                    httpMode: 'POST',
-                    url: webhookUrl,
-                    contentType: 'APPLICATION_JSON',
-                    requestBody: """{
-                        "text": "Deployment succeeded: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
-                    }"""
-                )
-            }
+            slackSend(channel: 'C07PURQG2A3', message: "Build succeeded: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
         }
         failure {
-            script {
-                def webhookUrl = credentials('slack-webhook-url')
-                httpRequest(
-                    httpMode: 'POST',
-                    url: webhookUrl,
-                    contentType: 'APPLICATION_JSON',
-                    requestBody: """{
-                        "text": "Deployment failed: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
-                    }"""
-                )
-            }
+            slackSend(channel: 'C07PURQG2A3', message: "Build failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
         }
     }
 }
