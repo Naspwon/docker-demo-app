@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    tools{
+        nodejs "node"
+    }
     // environment {
     //     HEROKU_API_KEY = credentials('HRKU-983ee96b-7abf-4805-8bf7-fd32f92ef428')  // Heroku API key stored in Jenkins
     //     HEROKU_APP_NAME = 'dockerd-app'  // Replace with your Heroku app name
