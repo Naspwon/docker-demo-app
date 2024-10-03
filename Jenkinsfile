@@ -9,24 +9,32 @@ pipeline{
             }
         }
         stage('Install dependencies'){
-            sh 'npm install'
+            steps{
+                sh 'npm install'
+            }           
         }
         stage('Run tests'){
-            echo "Tested successfully"
+            steps{
+                echo "Tested successfully"
+            }
         }
         stage('Start application'){
-            sh 'nohup npm start &'
-            sleep 10
-            sh 'curl -I http://localhost:3000 || exit 1'
+            steps{
+                sh 'nohup npm start &'
+                sleep 10
+                sh 'curl -I http://localhost:3000 || exit 1'
+            }
         }
         stage('deploy to git'){
-            sh '''
-                git config user.name "Naspwon"
-                git config user.email "naominyongesa12@gmail.com"
-                git add .
-                git commit -m "Deploying app to main"
-                git push origin main
+            steps{
+                sh '''
+                    git config user.name "Naspwon"
+                    git config user.email "naominyongesa12@gmail.com"
+                    git add .
+                    git commit -m "Deploying app to main"
+                    git push origin main
                 '''
+            }
         }
     }
 }
